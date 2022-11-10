@@ -1,0 +1,11 @@
+{
+  "name": "mexaversoDb",
+  "module": "dbconnector",
+  "action": "connect",
+  "options": {
+    "client": "sqlite3",
+    "connection": {
+      "filename": "/database.sqlite3"
+    }
+  }
+}
