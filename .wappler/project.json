@@ -17,5 +17,6 @@
     }
   ],
   "activeTarget": "Development",
-  "projectType": "web"
+  "projectType": "web",
+  "activeGitRemote": "v4"
 }
