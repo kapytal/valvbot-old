@@ -1,0 +1,38 @@
+{
+  "type": "sqlite3",
+  "connection": {
+    "filename": "/database.sqlite3"
+  },
+  "direct": true,
+  "schema": {
+    "tables": {
+      "user": {
+        "db": {},
+        "columns": {
+          "id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "unique": false,
+              "nullable": false
+            }
+          }
+        }
+      },
+      "role": {
+        "db": {},
+        "columns": {
+          "id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "unique": false,
+              "nullable": false
+            }
+          }
+        }
+      }
+    },
+    "views": {}
+  }
+}
