@@ -16,7 +16,36 @@
               "unique": false,
               "nullable": false
             }
+          },
+          "email": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "password": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "creation_date": {
+            "db": {
+              "type": "datetime",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
           }
+        },
+        "refs": {
+          "role": "userId"
         }
       },
       "role": {
@@ -28,6 +57,28 @@
               "primary": true,
               "unique": false,
               "nullable": false
+            }
+          },
+          "userId": {
+            "db": {
+              "type": "reference",
+              "primary": false,
+              "unique": false,
+              "nullable": true,
+              "references": "id",
+              "inTable": "user",
+              "referenceType": "integer",
+              "onUpdate": "CASCADE",
+              "onDelete": "CASCADE"
+            }
+          },
+          "roleLevel": {
+            "db": {
+              "type": "integer",
+              "default": "1",
+              "primary": false,
+              "unique": false,
+              "nullable": true
             }
           }
         }
