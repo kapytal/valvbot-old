@@ -14,6 +14,16 @@
   "exec": {
     "steps": [
       {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "auth"
+        },
+        "output": true,
+        "meta": []
+      },
+      {
         "name": "query",
         "module": "dbconnector",
         "action": "select",
