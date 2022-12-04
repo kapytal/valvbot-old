@@ -1,0 +1,41 @@
+{
+  "name": "insert",
+  "module": "dbupdater",
+  "action": "insert",
+  "options": {
+    "connection": "mexaversoDb",
+    "sql": {
+      "type": "insert",
+      "values": [
+        {
+          "table": "timesheets",
+          "column": "start",
+          "type": "datetime",
+          "value": "{{NOW}}"
+        }
+      ],
+      "table": "timesheets",
+      "returning": "id",
+      "query": "INSERT INTO timesheets\n(start) VALUES (:P1 /* {{NOW}} */)",
+      "params": [
+        {
+          "name": ":P1",
+          "type": "expression",
+          "value": "{{NOW}}",
+          "test": ""
+        }
+      ]
+    }
+  },
+  "meta": [
+    {
+      "name": "identity",
+      "type": "text"
+    },
+    {
+      "name": "affected",
+      "type": "number"
+    }
+  ],
+  "output": true
+}

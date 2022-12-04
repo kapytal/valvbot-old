@@ -11,12 +11,14 @@
   "targets": [
     {
       "name": "Development",
-      "remoteURL": "http://localhost:3000/",
+      "remoteURL": "http://localhost:3000",
       "access": "local",
       "targetType": "wappler"
     }
   ],
   "activeTarget": "Development",
   "projectType": "web",
-  "activeGitRemote": "v4"
+  "activeGitRemote": "v4",
+  "userUploadsFolder": "/public/uploads",
+  "frameworks": []
 }
