@@ -1,0 +1,177 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "options": {
+          "rules": {
+            "core:required": {},
+            "core:email": {}
+          }
+        },
+        "name": "email"
+      },
+      {
+        "type": "number",
+        "options": {
+          "rules": {
+            "core:required": {},
+            "core:number": {},
+            "core:min": {
+              "param": 0
+            },
+            "core:max": {
+              "param": 9
+            }
+          }
+        },
+        "name": "role"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "auth",
+          "permissions": [
+            "super admin"
+          ]
+        }
+      },
+      {
+        "name": "queryUser",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "mexaversoDb",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "user",
+                "column": "id"
+              }
+            ],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_POST.email}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "user"
+            },
+            "primary": "id",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "user.email",
+                  "field": "user.email",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{$_POST.email}}",
+                  "data": {
+                    "table": "user",
+                    "column": "email",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "email"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT id\nFROM user\nWHERE email = :P1 /* {{$_POST.email}} */"
+          }
+        },
+        "meta": [
+          {
+            "type": "number",
+            "name": "id"
+          }
+        ],
+        "outputType": "object",
+        "output": true
+      },
+      {
+        "name": "updateRole",
+        "module": "dbupdater",
+        "action": "update",
+        "options": {
+          "connection": "mexaversoDb",
+          "sql": {
+            "type": "update",
+            "values": [
+              {
+                "table": "role",
+                "column": "roleLevel",
+                "type": "number",
+                "value": "{{$_POST.role}}"
+              }
+            ],
+            "table": "role",
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "userId",
+                  "field": "userId",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{queryUser.id}}",
+                  "data": {
+                    "column": "userId"
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "returning": "id",
+            "query": "UPDATE role\nSET roleLevel = :P1 /* {{$_POST.role}} */\nWHERE userId = :P2 /* {{queryUser.id}} */",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{$_POST.role}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{queryUser.id}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ],
+        "output": true
+      }
+    ]
+  }
+}
