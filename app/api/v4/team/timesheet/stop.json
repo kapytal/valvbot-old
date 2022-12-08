@@ -1,0 +1,494 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "number",
+        "options": {
+          "rules": {
+            "core:required": {},
+            "core:integer": {}
+          }
+        },
+        "name": "time-entry"
+      },
+      {
+        "type": "number",
+        "name": "userId"
+      },
+      {
+        "type": "datetime",
+        "name": "start"
+      },
+      {
+        "type": "datetime",
+        "name": "stop"
+      },
+      {
+        "type": "time",
+        "name": "duration"
+      },
+      {
+        "type": "text",
+        "name": "description"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "auth",
+          "permissions": [
+            "developer"
+          ]
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "auth"
+        },
+        "meta": []
+      },
+      {
+        "name": "matchTimeEntry",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "mexaversoDb",
+          "sql": {
+            "type": "SELECT",
+            "columns": [],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_POST['time-entry']}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{identity}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "timesheets"
+            },
+            "primary": "time-entry",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "timesheets.time-entry",
+                  "field": "timesheets.time-entry",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_POST['time-entry']}}",
+                  "data": {
+                    "table": "timesheets",
+                    "column": "time-entry",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "increments",
+                      "primary": true,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "time-entry"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "timesheets.userId",
+                  "field": "timesheets.userId",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "timesheets",
+                    "column": "userId",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "reference",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "references": "id",
+                      "inTable": "user",
+                      "referenceType": "integer",
+                      "onUpdate": "CASCADE",
+                      "onDelete": "CASCADE",
+                      "name": "userId"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "timesheets.stop",
+                  "field": "timesheets.stop",
+                  "type": "datetime",
+                  "operator": "is_null",
+                  "value": null,
+                  "data": {
+                    "table": "timesheets",
+                    "column": "stop",
+                    "type": "datetime",
+                    "columnObj": {
+                      "type": "datetime",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "stop"
+                    }
+                  },
+                  "operation": "IS NULL"
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT *\nFROM timesheets\nWHERE \"time-entry\" = :P1 /* {{$_POST['time-entry']}} */ AND userId = :P2 /* {{identity}} */ AND stop IS NULL",
+            "orders": []
+          }
+        },
+        "meta": [
+          {
+            "type": "number",
+            "name": "time-entry"
+          },
+          {
+            "type": "number",
+            "name": "userId"
+          },
+          {
+            "type": "datetime",
+            "name": "start"
+          },
+          {
+            "type": "datetime",
+            "name": "stop"
+          },
+          {
+            "type": "time",
+            "name": "duration"
+          },
+          {
+            "type": "text",
+            "name": "description"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{matchTimeEntry['time-entry']>0}}",
+          "then": {
+            "steps": [
+              {
+                "name": "updateTimeEntry",
+                "module": "dbupdater",
+                "action": "update",
+                "options": {
+                  "connection": "mexaversoDb",
+                  "sql": {
+                    "type": "update",
+                    "values": [
+                      {
+                        "table": "timesheets",
+                        "column": "stop",
+                        "type": "datetime",
+                        "value": "{{NOW}}"
+                      }
+                    ],
+                    "table": "timesheets",
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "time-entry",
+                          "field": "time-entry",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{matchTimeEntry['time-entry']}}",
+                          "data": {
+                            "column": "time-entry"
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "returning": "time-entry",
+                    "query": "UPDATE timesheets\nSET stop = :P1 /* {{NOW}} */\nWHERE \"time-entry\" = :P2 /* {{matchTimeEntry['time-entry']}} */",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{NOW}}",
+                        "test": ""
+                      },
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P2",
+                        "value": "{{matchTimeEntry['time-entry']}}",
+                        "test": ""
+                      }
+                    ]
+                  }
+                },
+                "meta": [
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "duration",
+                "module": "core",
+                "action": "setvalue",
+                "options": {
+                  "value": "{{matchTimeEntry.start.dateDiff('minutes', NOW)}}"
+                },
+                "meta": [],
+                "outputType": "number",
+                "output": true
+              },
+              {
+                "name": "updateDuration",
+                "module": "dbupdater",
+                "action": "update",
+                "options": {
+                  "connection": "mexaversoDb",
+                  "sql": {
+                    "type": "update",
+                    "values": [
+                      {
+                        "table": "timesheets",
+                        "column": "duration",
+                        "type": "time",
+                        "value": "{{duration}}"
+                      }
+                    ],
+                    "table": "timesheets",
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "time-entry",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST[\"time-entry\"]}}",
+                          "data": {
+                            "column": "time-entry"
+                          },
+                          "operation": "="
+                        }
+                      ]
+                    },
+                    "returning": "time-entry",
+                    "query": "UPDATE timesheets\nSET duration = :P1 /* {{duration}} */\nWHERE \"time-entry\" = :P2 /* {{$_POST[\"time-entry\"]}} */",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{duration}}",
+                        "test": ""
+                      },
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P2",
+                        "value": "{{$_POST[\"time-entry\"]}}",
+                        "test": ""
+                      }
+                    ]
+                  }
+                },
+                "meta": [
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ],
+                "output": false
+              },
+              {
+                "name": "response",
+                "module": "dbconnector",
+                "action": "single",
+                "options": {
+                  "connection": "mexaversoDb",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
+                      {
+                        "table": "timesheets",
+                        "column": "time-entry"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "start"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "stop"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "duration"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "description"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "userId"
+                      }
+                    ],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{$_POST['time-entry']}}",
+                        "test": ""
+                      },
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P2",
+                        "value": "{{identity}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "timesheets"
+                    },
+                    "primary": "time-entry",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "timesheets.time-entry",
+                          "field": "timesheets.time-entry",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST['time-entry']}}",
+                          "data": {
+                            "table": "timesheets",
+                            "column": "time-entry",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "increments",
+                              "primary": true,
+                              "unique": false,
+                              "nullable": false,
+                              "name": "time-entry"
+                            }
+                          },
+                          "operation": "="
+                        },
+                        {
+                          "id": "timesheets.userId",
+                          "field": "timesheets.userId",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{identity}}",
+                          "data": {
+                            "table": "timesheets",
+                            "column": "userId",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "reference",
+                              "primary": false,
+                              "unique": false,
+                              "nullable": true,
+                              "references": "id",
+                              "inTable": "user",
+                              "referenceType": "integer",
+                              "onUpdate": "CASCADE",
+                              "onDelete": "CASCADE",
+                              "name": "userId"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT \"time-entry\", start, stop, duration, description, userId\nFROM timesheets\nWHERE \"time-entry\" = :P1 /* {{$_POST['time-entry']}} */ AND userId = :P2 /* {{identity}} */",
+                    "orders": []
+                  }
+                },
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "time-entry"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "start"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "stop"
+                  },
+                  {
+                    "type": "time",
+                    "name": "duration"
+                  },
+                  {
+                    "type": "text",
+                    "name": "description"
+                  },
+                  {
+                    "type": "number",
+                    "name": "userId"
+                  }
+                ],
+                "outputType": "object",
+                "output": true
+              }
+            ]
+          },
+          "else": {
+            "steps": {
+              "name": "response",
+              "module": "core",
+              "action": "setvalue",
+              "options": {
+                "value": {
+                  "success": false,
+                  "message": "User does not have this time entry"
+                }
+              },
+              "meta": [],
+              "output": true,
+              "outputType": "object"
+            }
+          }
+        },
+        "outputType": "boolean"
+      }
+    ]
+  }
+}

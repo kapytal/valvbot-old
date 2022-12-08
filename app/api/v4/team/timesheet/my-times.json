@@ -1,0 +1,158 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "offset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "auth",
+          "permissions": [
+            "developer"
+          ]
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "auth"
+        },
+        "meta": []
+      },
+      {
+        "name": "response",
+        "module": "dbconnector",
+        "action": "select",
+        "options": {
+          "connection": "mexaversoDb",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "timesheets",
+                "column": "time-entry"
+              },
+              {
+                "table": "timesheets",
+                "column": "start"
+              },
+              {
+                "table": "timesheets",
+                "column": "stop"
+              },
+              {
+                "table": "timesheets",
+                "column": "duration"
+              },
+              {
+                "table": "timesheets",
+                "column": "description"
+              }
+            ],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "timesheets"
+            },
+            "primary": "time-entry",
+            "joins": [],
+            "orders": [
+              {
+                "table": "timesheets",
+                "column": "time-entry",
+                "direction": "DESC",
+                "recid": 1
+              }
+            ],
+            "query": "SELECT \"time-entry\", start, stop, duration, description\nFROM timesheets\nWHERE userId = :P1 /* {{identity}} */\nORDER BY \"time-entry\" DESC",
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "timesheets.userId",
+                  "field": "timesheets.userId",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "timesheets",
+                    "column": "userId",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "reference",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "references": "id",
+                      "inTable": "user",
+                      "referenceType": "integer",
+                      "onUpdate": "CASCADE",
+                      "onDelete": "CASCADE",
+                      "name": "userId"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "time-entry"
+          },
+          {
+            "type": "datetime",
+            "name": "start"
+          },
+          {
+            "type": "datetime",
+            "name": "stop"
+          },
+          {
+            "type": "time",
+            "name": "duration"
+          },
+          {
+            "type": "text",
+            "name": "description"
+          }
+        ],
+        "outputType": "array"
+      }
+    ]
+  }
+}

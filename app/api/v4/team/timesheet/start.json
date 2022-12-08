@@ -43,64 +43,34 @@
           "sql": {
             "type": "SELECT",
             "columns": [],
-            "params": [
-              {
-                "operator": "equal",
-                "type": "expression",
-                "name": ":P1",
-                "value": "{{identity}}",
-                "test": ""
-              }
-            ],
+            "params": [],
             "table": {
               "name": "timesheets"
             },
-            "primary": "id",
+            "primary": "time-entry",
             "joins": [],
+            "query": "SELECT *\nFROM timesheets\nWHERE stop IS NULL",
+            "sort": "",
+            "dir": "",
             "wheres": {
               "condition": "AND",
               "rules": [
                 {
-                  "id": "timesheets.userId",
-                  "field": "timesheets.userId",
-                  "type": "double",
-                  "operator": "equal",
-                  "value": "{{identity}}",
-                  "data": {
-                    "table": "timesheets",
-                    "column": "userId",
-                    "type": "number",
-                    "columnObj": {
-                      "type": "reference",
-                      "primary": false,
-                      "unique": false,
-                      "nullable": true,
-                      "references": "id",
-                      "inTable": "user",
-                      "referenceType": "integer",
-                      "onUpdate": "CASCADE",
-                      "onDelete": "CASCADE",
-                      "name": "userId"
-                    }
-                  },
-                  "operation": "="
-                },
-                {
-                  "id": "timesheets.end",
-                  "field": "timesheets.end",
+                  "id": "timesheets.stop",
+                  "field": "timesheets.stop",
                   "type": "datetime",
                   "operator": "is_null",
                   "value": null,
                   "data": {
                     "table": "timesheets",
-                    "column": "end",
+                    "column": "stop",
                     "type": "datetime",
                     "columnObj": {
                       "type": "datetime",
                       "primary": false,
                       "unique": false,
                       "nullable": true,
-                      "name": "end"
+                      "name": "stop"
                     }
                   },
                   "operation": "IS NULL"
@@ -108,16 +78,13 @@
               ],
               "conditional": null,
               "valid": true
-            },
-            "query": "SELECT *\nFROM timesheets\nWHERE userId = :P1 /* {{identity}} */ AND end IS NULL",
-            "sort": "",
-            "dir": ""
+            }
           }
         },
         "meta": [
           {
             "type": "number",
-            "name": "id"
+            "name": "time-entry"
           },
           {
             "type": "number",
@@ -129,7 +96,7 @@
           },
           {
             "type": "datetime",
-            "name": "end"
+            "name": "stop"
           },
           {
             "type": "time",
@@ -165,71 +132,86 @@
             }
           },
           "else": {
-            "steps": {
-              "name": "insert",
-              "module": "dbupdater",
-              "action": "insert",
-              "options": {
-                "connection": "mexaversoDb",
-                "sql": {
-                  "type": "insert",
-                  "values": [
-                    {
-                      "table": "timesheets",
-                      "column": "start",
-                      "type": "datetime",
-                      "value": "{{NOW}}"
-                    },
-                    {
-                      "table": "timesheets",
-                      "column": "userId",
-                      "type": "number",
-                      "value": "{{identity}}"
-                    },
-                    {
-                      "table": "timesheets",
-                      "column": "description",
-                      "type": "text",
-                      "value": "{{$_POST.description}}"
-                    }
-                  ],
-                  "table": "timesheets",
-                  "returning": "id",
-                  "query": "INSERT INTO timesheets\n(start, userId, description) VALUES (:P1 /* {{NOW}} */, :P2 /* {{identity}} */, :P3 /* {{$_POST.description}} */)",
-                  "params": [
-                    {
-                      "name": ":P1",
-                      "type": "expression",
-                      "value": "{{NOW}}",
-                      "test": ""
-                    },
-                    {
-                      "name": ":P2",
-                      "type": "expression",
-                      "value": "{{identity}}",
-                      "test": ""
-                    },
-                    {
-                      "name": ":P3",
-                      "type": "expression",
-                      "value": "{{$_POST.description}}",
-                      "test": ""
-                    }
-                  ]
-                }
-              },
-              "meta": [
-                {
-                  "name": "identity",
-                  "type": "text"
+            "steps": [
+              {
+                "name": "insert",
+                "module": "dbupdater",
+                "action": "insert",
+                "options": {
+                  "connection": "mexaversoDb",
+                  "sql": {
+                    "type": "insert",
+                    "values": [
+                      {
+                        "table": "timesheets",
+                        "column": "start",
+                        "type": "datetime",
+                        "value": "{{NOW}}"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "userId",
+                        "type": "number",
+                        "value": "{{identity}}"
+                      },
+                      {
+                        "table": "timesheets",
+                        "column": "description",
+                        "type": "text",
+                        "value": "{{$_POST.description}}"
+                      }
+                    ],
+                    "table": "timesheets",
+                    "returning": "time-entry",
+                    "query": "INSERT INTO timesheets\n(start, userId, description) VALUES (:P1 /* {{NOW}} */, :P2 /* {{identity}} */, :P3 /* {{$_POST.description}} */)",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{NOW}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P2",
+                        "type": "expression",
+                        "value": "{{identity}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P3",
+                        "type": "expression",
+                        "value": "{{$_POST.description}}",
+                        "test": ""
+                      }
+                    ]
+                  }
                 },
-                {
-                  "name": "affected",
-                  "type": "number"
-                }
-              ],
-              "output": true
-            }
+                "meta": [
+                  {
+                    "name": "identity",
+                    "type": "text"
+                  },
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "response",
+                "module": "core",
+                "action": "setvalue",
+                "options": {
+                  "value": {
+                    "success": true,
+                    "time-entry": "{{insert.identity}}"
+                  }
+                },
+                "meta": [],
+                "outputType": "text",
+                "output": true
+              }
+            ]
           }
         },
         "outputType": "boolean"

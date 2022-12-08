@@ -87,7 +87,7 @@
       "timesheets": {
         "db": {},
         "columns": {
-          "id": {
+          "time-entry": {
             "db": {
               "type": "increments",
               "primary": true,
@@ -116,7 +116,7 @@
               "nullable": true
             }
           },
-          "end": {
+          "stop": {
             "db": {
               "type": "datetime",
               "primary": false,
