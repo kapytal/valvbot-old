@@ -43,13 +43,21 @@
           "sql": {
             "type": "SELECT",
             "columns": [],
-            "params": [],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}",
+                "test": ""
+              }
+            ],
             "table": {
               "name": "timesheets"
             },
             "primary": "time-entry",
             "joins": [],
-            "query": "SELECT *\nFROM timesheets\nWHERE stop IS NULL",
+            "query": "SELECT *\nFROM timesheets\nWHERE stop IS NULL AND userId = :P1 /* {{identity}} */",
             "sort": "",
             "dir": "",
             "wheres": {
@@ -74,6 +82,31 @@
                     }
                   },
                   "operation": "IS NULL"
+                },
+                {
+                  "id": "timesheets.userId",
+                  "field": "timesheets.userId",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "timesheets",
+                    "column": "userId",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "reference",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "references": "id",
+                      "inTable": "user",
+                      "referenceType": "integer",
+                      "onUpdate": "CASCADE",
+                      "onDelete": "CASCADE",
+                      "name": "userId"
+                    }
+                  },
+                  "operation": "="
                 }
               ],
               "conditional": null,
@@ -196,6 +229,44 @@
                     "type": "number"
                   }
                 ]
+              },
+              {
+                "name": "messageDiscord",
+                "module": "api",
+                "action": "send",
+                "options": {
+                  "method": "POST",
+                  "url": "https://discord.com/api/v10/channels/852185817605996554/messages",
+                  "dataType": "json",
+                  "data": {
+                    "content": "A new timer has been started by {{identity}}: {{$_POST.description}}"
+                  },
+                  "schema": [
+                    {
+                      "type": "array",
+                      "name": "data"
+                    },
+                    {
+                      "type": "object",
+                      "name": "headers"
+                    }
+                  ],
+                  "passErrors": false,
+                  "headers": {
+                    "Authorization": "Bot MTA0ODc1NjAxMDMzODI0MjYyMQ.GWPTNu.fW4NEG0cXEpmWQ72B-Sj9wZHcY4yfbZPPp8fyo"
+                  }
+                },
+                "meta": [
+                  {
+                    "type": "array",
+                    "name": "data"
+                  },
+                  {
+                    "type": "object",
+                    "name": "headers"
+                  }
+                ],
+                "outputType": "object"
               },
               {
                 "name": "response",
