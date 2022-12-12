@@ -1,4 +1,7 @@
 {
-  "debug": true,
-  "secret": "JlJ4WUFqCMqz1cy"
+  "debug": false,
+  "secret": "JlJ4WUFqCMqz1cy",
+  "env": {
+    "endpoint": "google.com"
+  }
 }

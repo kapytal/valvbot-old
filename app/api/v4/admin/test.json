@@ -1,0 +1,11 @@
+{
+  "name": "response",
+  "module": "core",
+  "action": "setvalue",
+  "options": {
+    "value": "{{$_ENV.endpoint}}"
+  },
+  "meta": [],
+  "outputType": "text",
+  "output": true
+}

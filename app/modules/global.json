@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "$_ENV": [
+      {
+        "type": "text",
+        "name": "endpoint"
+      }
+    ]
+  },
+  "exec": {}
+}
