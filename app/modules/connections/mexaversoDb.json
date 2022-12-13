@@ -6,10 +6,8 @@
     "client": "sqlite3",
     "connection": {
       "filename": "/database.sqlite3"
-    },
-    "meta": {}
+    }
   },
-  "actionFilePath": "file:///home/omi/MEGA/Negocios/Criptodivisas/OMIEX/100OMI-Informacion/120OMI-Sistemas/Kapytal%20V4/app/modules/connections/mexaversoDb.json",
   "serverType": "node",
   "fileName": "mexaversoDb.json"
 }
