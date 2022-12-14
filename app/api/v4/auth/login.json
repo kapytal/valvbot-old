@@ -108,7 +108,7 @@
         "action": "login",
         "options": {
           "provider": "auth",
-          "password": "{{$_POST.password.sha256(getTimestamp.creation_date + 'Alfa$1714')}}",
+          "password": "{{$_POST.password.sha256(getTimestamp.creation_date + $_ENV.SALT)}}",
           "username": "{{$_POST.email}}",
           "remember": 1
         },

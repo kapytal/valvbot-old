@@ -51,7 +51,7 @@
         "module": "core",
         "action": "setvalue",
         "options": {
-          "value": "{{$_POST.password.sha256(timestamp + 'Alfa$1714')}}"
+          "value": "{{$_POST.password.sha256(timestamp + $_ENV.SALT)}}"
         },
         "meta": [],
         "outputType": "text"
