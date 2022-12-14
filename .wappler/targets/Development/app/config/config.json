@@ -3,6 +3,6 @@
   "secret": "JlJ4WUFqCMqz1cy",
   "env": {
     "ENDPOINT": "google.com",
-    "SALT": "Test123"
+    "SALT": "Alfa$1714"
   }
 }
