@@ -3,7 +3,7 @@
   "module": "core",
   "action": "setvalue",
   "options": {
-    "value": "{{$_ENV.endpoint}}"
+    "value": "{{$_ENV.ENDPOINT}}"
   },
   "meta": [],
   "outputType": "text",
