@@ -3,7 +3,11 @@
     "$_ENV": [
       {
         "type": "text",
-        "name": "endpoint"
+        "name": "ENDPOINT"
+      },
+      {
+        "type": "text",
+        "name": "SALT"
       }
     ]
   },

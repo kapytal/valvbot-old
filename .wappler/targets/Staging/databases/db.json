@@ -1,0 +1,11 @@
+{
+  "direct": true,
+  "type": "sqlite3",
+  "connection": {
+    "filename": "/database-prod.sqlite3"
+  },
+  "schema": {
+    "tables": {},
+    "views": {}
+  }
+}

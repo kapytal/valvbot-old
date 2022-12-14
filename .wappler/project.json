@@ -16,9 +16,18 @@
       "targetType": "wappler",
       "databaseConnectionType": "sqlite",
       "sqliteDbFile": "/database.sqlite3"
+    },
+    {
+      "name": "Staging",
+      "remoteURL": "http://localhost:3000",
+      "access": "local",
+      "targetType": "wappler",
+      "databaseConnectionType": "sqlite",
+      "sqliteDbFile": "/database-prod.sqlite3",
+      "usage": "stage"
     }
   ],
-  "activeTarget": "Staging",
+  "activeTarget": "Development",
   "projectType": "web",
   "activeGitRemote": "v4",
   "userUploadsFolder": "/public/uploads",
