@@ -1,0 +1,7 @@
+{
+  "direct": true,
+  "type": "sqlite3",
+  "connection": {
+    "filename": "/database.sqlite3"
+  }
+}

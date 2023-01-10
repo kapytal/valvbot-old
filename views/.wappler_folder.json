@@ -1,0 +1,6 @@
+{
+  "register.ejs": {
+    "layoutPage": "",
+    "description": "Page for registration of uses"
+  }
+}
