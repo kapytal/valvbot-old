@@ -3,5 +3,79 @@
   "type": "sqlite3",
   "connection": {
     "filename": "/database.sqlite3"
+  },
+  "schema": {
+    "tables": {
+      "user": {
+        "db": {},
+        "refs": {
+          "role": "userId",
+          "timesheets": "userId"
+        }
+      },
+      "role": {
+        "db": {}
+      },
+      "timesheets": {
+        "db": {},
+        "columns": {
+          "time-entry": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "unique": false,
+              "nullable": false
+            }
+          },
+          "userId": {
+            "db": {
+              "type": "reference",
+              "primary": false,
+              "unique": false,
+              "nullable": true,
+              "references": "id",
+              "inTable": "user",
+              "referenceType": "integer",
+              "onUpdate": "CASCADE",
+              "onDelete": "CASCADE"
+            }
+          },
+          "start": {
+            "db": {
+              "type": "datetime",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "stop": {
+            "db": {
+              "type": "datetime",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "duration": {
+            "db": {
+              "type": "time",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "description": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          }
+        }
+      }
+    },
+    "views": {}
   }
 }

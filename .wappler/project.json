@@ -2,7 +2,7 @@
   "hostingType": "wappler",
   "projectServerModel": "node",
   "runtime": "capacitor",
-  "projectName": "V4",
+  "projectName": "OMIEX",
   "webRootFolder": "/public",
   "useRouting": true,
   "addBase": true,
@@ -16,15 +16,6 @@
       "targetType": "wappler",
       "databaseConnectionType": "sqlite",
       "sqliteDbFile": "/database.sqlite3"
-    },
-    {
-      "name": "Staging",
-      "remoteURL": "http://localhost:3000",
-      "access": "local",
-      "targetType": "wappler",
-      "databaseConnectionType": "sqlite",
-      "sqliteDbFile": "/database-prod.sqlite3",
-      "usage": "stage"
     }
   ],
   "activeTarget": "Development",
