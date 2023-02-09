@@ -15,7 +15,7 @@
       "access": "local",
       "targetType": "wappler",
       "databaseConnectionType": "sqlite",
-      "sqliteDbFile": "/database.sqlite3"
+      "sqliteDbFile": "/basedatos.sqlite3"
     }
   ],
   "activeTarget": "Development",
