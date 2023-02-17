@@ -1,0 +1,19 @@
+{
+  "name": "oauth",
+  "module": "oauth",
+  "action": "provider",
+  "options": {
+    "auth_endpoint": "https://accounts.google.com/o/oauth2/auth",
+    "token_endpoint": "https://oauth2.googleapis.com/token",
+    "client_id": "360593031308-22a3p3vgkmiks1rgkgnc6r57qmhqucsc.apps.googleusercontent.com",
+    "client_secret": "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",
+    "service": "google"
+  },
+  "meta": [
+    {
+      "name": "access_token",
+      "type": "text"
+    }
+  ],
+  "outputType": "object"
+}

@@ -42,6 +42,49 @@
   "exec": {
     "steps": [
       {
+        "name": "google",
+        "module": "api",
+        "action": "send",
+        "options": {
+          "url": "{{'https://dialogflow.googleapis.com/v2/projects/telefonia-di9o/agent/sessions/'+$_POST.WaId+':detectIntent'}}",
+          "method": "POST",
+          "auth": "oauth",
+          "oauth": "oauth",
+          "schema": [
+            {
+              "type": "object",
+              "name": "data"
+            },
+            {
+              "type": "text",
+              "name": "headers"
+            }
+          ],
+          "data": {
+            "test": {
+              "query_input": {
+                "text": {
+                  "text": "ALO",
+                  "language_code": "es-MX"
+                }
+              }
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "object",
+            "name": "data"
+          },
+          {
+            "type": "text",
+            "name": "headers"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
         "name": "body",
         "module": "core",
         "action": "setvalue",
