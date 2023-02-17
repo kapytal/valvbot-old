@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "Body"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "b",
+      "module": "core",
+      "action": "setvalue",
+      "options": {
+        "value": "{{$_POST.Body}}"
+      },
+      "meta": [],
+      "outputType": "text",
+      "output": true
+    }
+  }
+}

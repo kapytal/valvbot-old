@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "Body"
+      },
+      {
+        "type": "text",
+        "name": "SmsMessageSid"
+      },
+      {
+        "type": "text",
+        "name": "ProfileName"
+      },
+      {
+        "type": "text",
+        "name": "SmsSid"
+      },
+      {
+        "type": "text",
+        "name": "WaId"
+      },
+      {
+        "type": "text",
+        "name": "SmsStatus"
+      },
+      {
+        "type": "text",
+        "name": "To"
+      },
+      {
+        "type": "text",
+        "name": "AccountSid"
+      },
+      {
+        "type": "text",
+        "name": "From"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "body",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{$_POST.Body}}"
+        },
+        "meta": [],
+        "outputType": "text",
+        "output": true
+      },
+      {
+        "name": "To",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{$_POST.From}}"
+        },
+        "meta": [],
+        "outputType": "text",
+        "output": true
+      },
+      {
+        "name": "respondWP",
+        "module": "api",
+        "action": "send",
+        "options": {
+          "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
+          "method": "POST",
+          "dataType": "x-www-form-urlencoded",
+          "auth": "username",
+          "username": "AC65f728ee6851d7a16224843eeaf97a2f",
+          "password": "70de2903fd947abc56b89754da318b09",
+          "data": {
+            "To": "{{$_POST.From}}",
+            "From": "whatsapp:+14155238886",
+            "Body": "{{'Hola desde Wappler: '+body+' y tu número es '+$_POST.WaId}}"
+          }
+        },
+        "output": true
+      }
+    ]
+  }
+}
