@@ -42,7 +42,33 @@
   "exec": {
     "steps": [
       {
-        "name": "google",
+        "name": "jwt",
+        "module": "jwt",
+        "action": "sign",
+        "options": {
+          "alg": "RS256",
+          "key": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQCq0V2g0Bijr/Tu\noOmJ5LB8d7XqDBCjH8E0ghuvH3YL7YO1ZFWcYZsrIIB59u/9ml6A3yYIJONJZKoy\nqL8HW/vRzgs3JfG5uN2tMJqDidx+MJn0YZz/lgcPeOGk8zYVx9smtQTRBBb78KjY\nlmn5m8Kq8y8h9SNmfKUsgG0nfwr8+8VV5DyTBBrNfMOAJi1JQdoHw1Er/DevhdQI\nf9m6/WaKuCZqUuYFDgP49r55CQ1b6sjpaZFkQqqEYB5OGYeZ7ReoyFCxTcCXoJnh\nNkZh910mMqemBsDDFEnbGXCsErRMWa4AIJP2M2ztS9FCVhYLS1Dsnl6f7/gluPzK\n0l+0RpDRAgMBAAECgf8hXMLspbgqQDOWZ9c1F3Vg2gCtta2KLqmNl9vQWFS1/625\nv974rBeiVLbDG3fEEGJkyTCkZo/9xat4OX0V8uE8GQIXw1Fy9KhXKycCieqGuvdW\nw7nmMWcvnmxzywzFNEOZS8GlESdsDZTsuHP6THG48cZC254OZkncZzjqfeWngzNX\n1VIXU0GOXUfLMgvPXPp8FoHY+1QEfU3H+1eTR5ZquF96H3Nrk06kJmlvvkW/qh+g\nWcYliEO9iSQUOLwDVpfsYjFgSG4J07pkDmy+caUmH12v23DT03DjAlKGjPsWoyev\n1QUoryjLHVD1qcno7+yQXsqQfShWUGCxK4ecpAECgYEA0fiiPm6ieG57wU3B51s9\nKNPtsqNVvYpVfn9NH/7sCF44GpSoXNgwPJ10qgK2YnTv1QWLCzqi9S2H28SGOQJR\nnt8Qk7d2Me6ystaGoj/kmTYvevI29tJea+jqk6CCms2D7yG55rbaLFp7IYIQS7xC\neK2b5k0GorfG5lLxh/8g1+ECgYEA0EN8CMTqGL0bcgb+sWvsLNx0YWyL+iYfVCZ0\np4WvQQH24d1eGt/uiM7tVATjhIskkR7hmBiyFTklquj/yEVQr8S3JJs+82osicQc\nGups7vtxLa2MkzwlIfoebsmnG1fUf8Td79p2V7pffCvlzH6Ekx7IVNF6HgAC6Ft5\nTpWOFvECgYB8YVKKtTLdMGVy3sLsb+nM063M0mCqBNYcNwDS4Umks1t8s28AgLgi\nUAuZ4j10GV0wzTXOkw+ROUVvc/0mrC75c534QwdrEMEem2HpnvulnqmFpRHWKEvy\nlGjQxpZXaUKsV0guWUboWzjxYoCQvJaLshvV0u8JWOAj9CJLs2AbQQKBgCSj2syI\nKE9V5eA3ztNUE2cJGgiR2kaWMmjRozBd2qlrOQ4frhC4WPUEwshHW+fTuwk1D6d8\noMgPF8tr1qRbXYiu6TGthnO4uEE8mV065RNedVj98X9t03KY2IXRQG8VErOv5QPv\nwWZJycbEylch4x0nC0Ow3vUsN1a90Se8NBVhAoGAM0SkpHkuud3ZA3KgbmpwVMqD\nWKwozCoxRWo9X81izNhpgT2QJ5mRNz9B3jvBgPrx79Bq8FUqyUMHEA2B6y8WvXay\nlHT6atLEj2Frr1kcLEt+7lBXsDQNnadF/cvkjFjX6ljswOZRx8HEOtYRBMnKRu9g\ndxUXkDrYZXgHagi3QS8=\n-----END PRIVATE KEY-----\n",
+          "iss": "bot-791@telefonia-di9o.iam.gserviceaccount.com",
+          "aud": "https://oauth2.googleapis.com/token",
+          "claims": {
+            "scope": "https://www.googleapis.com/auth/dialogflow"
+          }
+        },
+        "outputType": "text"
+      },
+      "oauth/oauth",
+      {
+        "name": "query_input",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{\"text\": {\"text\": \"Hola\",\"language_code\": \"es-MX\"}} "
+        },
+        "meta": [],
+        "outputType": "text"
+      },
+      {
+        "name": "sendToDialogflow",
         "module": "api",
         "action": "send",
         "options": {
@@ -53,78 +79,409 @@
           "schema": [
             {
               "type": "object",
-              "name": "data"
-            },
-            {
-              "type": "text",
-              "name": "headers"
+              "name": "data",
+              "sub": [
+                {
+                  "type": "text",
+                  "name": "responseId"
+                },
+                {
+                  "type": "object",
+                  "name": "queryResult",
+                  "sub": [
+                    {
+                      "type": "text",
+                      "name": "queryText"
+                    },
+                    {
+                      "type": "text",
+                      "name": "action"
+                    },
+                    {
+                      "type": "object",
+                      "name": "parameters"
+                    },
+                    {
+                      "type": "boolean",
+                      "name": "allRequiredParamsPresent"
+                    },
+                    {
+                      "type": "text",
+                      "name": "fulfillmentText"
+                    },
+                    {
+                      "type": "array",
+                      "name": "fulfillmentMessages",
+                      "sub": [
+                        {
+                          "type": "object",
+                          "name": "text",
+                          "sub": [
+                            {
+                              "type": "array",
+                              "name": "text",
+                              "sub": [
+                                {
+                                  "type": "text",
+                                  "name": "$value"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "name": "intent",
+                      "sub": [
+                        {
+                          "type": "text",
+                          "name": "name"
+                        },
+                        {
+                          "type": "text",
+                          "name": "displayName"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "number",
+                      "name": "intentDetectionConfidence"
+                    },
+                    {
+                      "type": "text",
+                      "name": "languageCode"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "data": {
-            "test": {
-              "query_input": {
-                "text": {
-                  "text": "ALO",
-                  "language_code": "es-MX"
-                }
+            "query_input": {
+              "text": {
+                "text": "{{$_POST.Body}}",
+                "language_code": "es-MX"
               }
             }
-          }
+          },
+          "dataType": "json"
         },
-        "output": true,
         "meta": [
           {
             "type": "object",
-            "name": "data"
-          },
-          {
-            "type": "text",
-            "name": "headers"
+            "name": "data",
+            "sub": [
+              {
+                "type": "text",
+                "name": "responseId"
+              },
+              {
+                "type": "object",
+                "name": "queryResult",
+                "sub": [
+                  {
+                    "type": "text",
+                    "name": "queryText"
+                  },
+                  {
+                    "type": "text",
+                    "name": "action"
+                  },
+                  {
+                    "type": "object",
+                    "name": "parameters"
+                  },
+                  {
+                    "type": "boolean",
+                    "name": "allRequiredParamsPresent"
+                  },
+                  {
+                    "type": "text",
+                    "name": "fulfillmentText"
+                  },
+                  {
+                    "type": "array",
+                    "name": "fulfillmentMessages",
+                    "sub": [
+                      {
+                        "type": "object",
+                        "name": "text",
+                        "sub": [
+                          {
+                            "type": "array",
+                            "name": "text",
+                            "sub": [
+                              {
+                                "type": "text",
+                                "name": "$value"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "name": "intent",
+                    "sub": [
+                      {
+                        "type": "text",
+                        "name": "name"
+                      },
+                      {
+                        "type": "text",
+                        "name": "displayName"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "number",
+                    "name": "intentDetectionConfidence"
+                  },
+                  {
+                    "type": "text",
+                    "name": "languageCode"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "outputType": "object"
       },
       {
-        "name": "body",
+        "name": "dialogflowAction",
         "module": "core",
         "action": "setvalue",
         "options": {
-          "value": "{{$_POST.Body}}"
+          "value": "{{sendToDialogflow.data.queryResult.action}}"
         },
         "meta": [],
         "outputType": "text",
         "output": true
       },
       {
-        "name": "To",
+        "name": "text",
         "module": "core",
         "action": "setvalue",
         "options": {
-          "value": "{{$_POST.From}}"
+          "value": "{{sendToDialogflow.data.queryResult.fulfillmentMessages[0].text.text[0]}}",
+          "schema": [
+            {
+              "type": "text",
+              "name": "responseId"
+            },
+            {
+              "type": "object",
+              "name": "queryResult",
+              "sub": [
+                {
+                  "type": "text",
+                  "name": "queryText"
+                },
+                {
+                  "type": "text",
+                  "name": "action"
+                },
+                {
+                  "type": "object",
+                  "name": "parameters"
+                },
+                {
+                  "type": "boolean",
+                  "name": "allRequiredParamsPresent"
+                },
+                {
+                  "type": "text",
+                  "name": "fulfillmentText"
+                },
+                {
+                  "type": "array",
+                  "name": "fulfillmentMessages",
+                  "sub": [
+                    {
+                      "type": "object",
+                      "name": "text",
+                      "sub": [
+                        {
+                          "type": "array",
+                          "name": "text",
+                          "sub": [
+                            {
+                              "type": "text",
+                              "name": "$value"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "name": "intent",
+                  "sub": [
+                    {
+                      "type": "text",
+                      "name": "name"
+                    },
+                    {
+                      "type": "text",
+                      "name": "displayName"
+                    }
+                  ]
+                },
+                {
+                  "type": "number",
+                  "name": "intentDetectionConfidence"
+                },
+                {
+                  "type": "text",
+                  "name": "languageCode"
+                }
+              ]
+            }
+          ]
         },
-        "meta": [],
-        "outputType": "text",
+        "meta": [
+          {
+            "name": "$value",
+            "type": "text"
+          },
+          {
+            "type": "text",
+            "name": "responseId"
+          },
+          {
+            "type": "object",
+            "name": "queryResult",
+            "sub": [
+              {
+                "type": "text",
+                "name": "queryText"
+              },
+              {
+                "type": "text",
+                "name": "action"
+              },
+              {
+                "type": "object",
+                "name": "parameters"
+              },
+              {
+                "type": "boolean",
+                "name": "allRequiredParamsPresent"
+              },
+              {
+                "type": "text",
+                "name": "fulfillmentText"
+              },
+              {
+                "type": "array",
+                "name": "fulfillmentMessages",
+                "sub": [
+                  {
+                    "type": "object",
+                    "name": "text",
+                    "sub": [
+                      {
+                        "type": "array",
+                        "name": "text",
+                        "sub": [
+                          {
+                            "type": "text",
+                            "name": "$value"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "object",
+                "name": "intent",
+                "sub": [
+                  {
+                    "type": "text",
+                    "name": "name"
+                  },
+                  {
+                    "type": "text",
+                    "name": "displayName"
+                  }
+                ]
+              },
+              {
+                "type": "number",
+                "name": "intentDetectionConfidence"
+              },
+              {
+                "type": "text",
+                "name": "languageCode"
+              }
+            ]
+          }
+        ],
+        "outputType": "object",
         "output": true
       },
       {
-        "name": "respondWP",
-        "module": "api",
-        "action": "send",
+        "name": "",
+        "module": "core",
+        "action": "condition",
         "options": {
-          "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
-          "method": "POST",
-          "dataType": "x-www-form-urlencoded",
-          "auth": "username",
-          "username": "AC65f728ee6851d7a16224843eeaf97a2f",
-          "password": "70de2903fd947abc56b89754da318b09",
-          "data": {
-            "To": "{{$_POST.From}}",
-            "From": "whatsapp:+14155238886",
-            "Body": "{{'Hola desde Wappler: '+body+' y tu número es '+$_POST.WaId}}"
+          "if": "{{dialogflowAction=='input.unknown'}}",
+          "then": {
+            "steps": {
+              "name": "respondWP",
+              "module": "api",
+              "action": "send",
+              "options": {
+                "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
+                "method": "POST",
+                "dataType": "x-www-form-urlencoded",
+                "auth": "username",
+                "username": "AC65f728ee6851d7a16224843eeaf97a2f",
+                "password": "70de2903fd947abc56b89754da318b09",
+                "data": {
+                  "To": "{{$_POST.From}}",
+                  "From": "whatsapp:+14155238886",
+                  "Body": "Disculpa. No te entendí así que lo mandaré a ChatGPT"
+                }
+              },
+              "output": true
+            }
+          },
+          "else": {
+            "steps": {
+              "name": "respondWP_copy",
+              "module": "api",
+              "action": "send",
+              "options": {
+                "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
+                "method": "POST",
+                "dataType": "x-www-form-urlencoded",
+                "auth": "username",
+                "username": "AC65f728ee6851d7a16224843eeaf97a2f",
+                "password": "70de2903fd947abc56b89754da318b09",
+                "data": {
+                  "To": "{{$_POST.From}}",
+                  "From": "whatsapp:+14155238886",
+                  "Body": "{{text}}"
+                }
+              }
+            }
           }
         },
-        "output": true
+        "outputType": "boolean"
       }
     ]
+  },
+  "usedModules": {
+    "jsonwebtoken": "^8.5.1"
   }
 }

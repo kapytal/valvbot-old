@@ -1,0 +1,15 @@
+{
+  "name": "jwt",
+  "module": "jwt",
+  "action": "sign",
+  "options": {
+    "alg": "RS256",
+    "key": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQCq0V2g0Bijr/Tu\noOmJ5LB8d7XqDBCjH8E0ghuvH3YL7YO1ZFWcYZsrIIB59u/9ml6A3yYIJONJZKoy\nqL8HW/vRzgs3JfG5uN2tMJqDidx+MJn0YZz/lgcPeOGk8zYVx9smtQTRBBb78KjY\nlmn5m8Kq8y8h9SNmfKUsgG0nfwr8+8VV5DyTBBrNfMOAJi1JQdoHw1Er/DevhdQI\nf9m6/WaKuCZqUuYFDgP49r55CQ1b6sjpaZFkQqqEYB5OGYeZ7ReoyFCxTcCXoJnh\nNkZh910mMqemBsDDFEnbGXCsErRMWa4AIJP2M2ztS9FCVhYLS1Dsnl6f7/gluPzK\n0l+0RpDRAgMBAAECgf8hXMLspbgqQDOWZ9c1F3Vg2gCtta2KLqmNl9vQWFS1/625\nv974rBeiVLbDG3fEEGJkyTCkZo/9xat4OX0V8uE8GQIXw1Fy9KhXKycCieqGuvdW\nw7nmMWcvnmxzywzFNEOZS8GlESdsDZTsuHP6THG48cZC254OZkncZzjqfeWngzNX\n1VIXU0GOXUfLMgvPXPp8FoHY+1QEfU3H+1eTR5ZquF96H3Nrk06kJmlvvkW/qh+g\nWcYliEO9iSQUOLwDVpfsYjFgSG4J07pkDmy+caUmH12v23DT03DjAlKGjPsWoyev\n1QUoryjLHVD1qcno7+yQXsqQfShWUGCxK4ecpAECgYEA0fiiPm6ieG57wU3B51s9\nKNPtsqNVvYpVfn9NH/7sCF44GpSoXNgwPJ10qgK2YnTv1QWLCzqi9S2H28SGOQJR\nnt8Qk7d2Me6ystaGoj/kmTYvevI29tJea+jqk6CCms2D7yG55rbaLFp7IYIQS7xC\neK2b5k0GorfG5lLxh/8g1+ECgYEA0EN8CMTqGL0bcgb+sWvsLNx0YWyL+iYfVCZ0\np4WvQQH24d1eGt/uiM7tVATjhIskkR7hmBiyFTklquj/yEVQr8S3JJs+82osicQc\nGups7vtxLa2MkzwlIfoebsmnG1fUf8Td79p2V7pffCvlzH6Ekx7IVNF6HgAC6Ft5\nTpWOFvECgYB8YVKKtTLdMGVy3sLsb+nM063M0mCqBNYcNwDS4Umks1t8s28AgLgi\nUAuZ4j10GV0wzTXOkw+ROUVvc/0mrC75c534QwdrEMEem2HpnvulnqmFpRHWKEvy\nlGjQxpZXaUKsV0guWUboWzjxYoCQvJaLshvV0u8JWOAj9CJLs2AbQQKBgCSj2syI\nKE9V5eA3ztNUE2cJGgiR2kaWMmjRozBd2qlrOQ4frhC4WPUEwshHW+fTuwk1D6d8\noMgPF8tr1qRbXYiu6TGthnO4uEE8mV065RNedVj98X9t03KY2IXRQG8VErOv5QPv\nwWZJycbEylch4x0nC0Ow3vUsN1a90Se8NBVhAoGAM0SkpHkuud3ZA3KgbmpwVMqD\nWKwozCoxRWo9X81izNhpgT2QJ5mRNz9B3jvBgPrx79Bq8FUqyUMHEA2B6y8WvXay\nlHT6atLEj2Frr1kcLEt+7lBXsDQNnadF/cvkjFjX6ljswOZRx8HEOtYRBMnKRu9g\ndxUXkDrYZXgHagi3QS8=\n-----END PRIVATE KEY-----\n",
+    "iss": "bot-791@telefonia-di9o.iam.gserviceaccount.com",
+    "aud": "https://oauth2.googleapis.com/token",
+    "claims": {
+      "scope": "https://www.googleapis.com/auth/dialogflow"
+    }
+  },
+  "outputType": "text"
+}
