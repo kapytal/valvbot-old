@@ -58,16 +58,6 @@
       },
       "oauth/oauth",
       {
-        "name": "query_input",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{\"text\": {\"text\": \"Hola\",\"language_code\": \"es-MX\"}} "
-        },
-        "meta": [],
-        "outputType": "text"
-      },
-      {
         "name": "sendToDialogflow",
         "module": "api",
         "action": "send",
@@ -260,8 +250,7 @@
           "value": "{{sendToDialogflow.data.queryResult.action}}"
         },
         "meta": [],
-        "outputType": "text",
-        "output": true
+        "outputType": "text"
       },
       {
         "name": "text",
@@ -426,8 +415,7 @@
             ]
           }
         ],
-        "outputType": "object",
-        "output": true
+        "outputType": "object"
       },
       {
         "name": "",
@@ -436,25 +424,279 @@
         "options": {
           "if": "{{dialogflowAction=='input.unknown'}}",
           "then": {
-            "steps": {
-              "name": "respondWP",
-              "module": "api",
-              "action": "send",
-              "options": {
-                "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
-                "method": "POST",
-                "dataType": "x-www-form-urlencoded",
-                "auth": "username",
-                "username": "AC65f728ee6851d7a16224843eeaf97a2f",
-                "password": "70de2903fd947abc56b89754da318b09",
-                "data": {
-                  "To": "{{$_POST.From}}",
-                  "From": "whatsapp:+14155238886",
-                  "Body": "Disculpa. No te entendí así que lo mandaré a ChatGPT"
-                }
+            "steps": [
+              {
+                "name": "gptPrompt",
+                "module": "core",
+                "action": "setvalue",
+                "options": {
+                  "value": "The following is a conversation in spanish in insclusive language with an AI assistant called Axel, Axel can have meaningful conversations with users. The assistant is helpful and friendly. Its objective is to sale Cell Phone Plans that specialize in LGBT members and provide different benefits such as cheap mobile and internet plans, included medical insurance and coupons in discounts in different stores across mexico. With each response, the AI assisstant prompts the user to continue the conversation in a natural way. Also when the user request support Axel will answer with ##Support## so a human gets notified to get involved in the conversation. Axel: Hola preciose, soy Axel, puedo darte cualquier información sobre nuestro planes de telefonía o servicio técnico. ¿Cómo puedo ayudarte chule? Usuario: {{$_POST.Body}}. Axel:"
+                },
+                "meta": [],
+                "outputType": "text",
+                "output": true
               },
-              "output": true
-            }
+              {
+                "name": "openAI",
+                "module": "api",
+                "action": "send",
+                "options": {
+                  "url": "https://api.openai.com/v1/completions",
+                  "method": "POST",
+                  "dataType": "json",
+                  "data": {
+                    "model": "text-davinci-003",
+                    "prompt": "{{gptPrompt}}",
+                    "temperature": 0,
+                    "max_tokens": 195
+                  },
+                  "headers": {
+                    "Authorization": "Bearer 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",
+                    "Content-Type": "application/json"
+                  },
+                  "schema": [
+                    {
+                      "type": "object",
+                      "name": "data",
+                      "sub": [
+                        {
+                          "type": "text",
+                          "name": "id"
+                        },
+                        {
+                          "type": "text",
+                          "name": "object"
+                        },
+                        {
+                          "type": "number",
+                          "name": "created"
+                        },
+                        {
+                          "type": "text",
+                          "name": "model"
+                        },
+                        {
+                          "type": "array",
+                          "name": "choices",
+                          "sub": [
+                            {
+                              "type": "text",
+                              "name": "text"
+                            },
+                            {
+                              "type": "number",
+                              "name": "index"
+                            },
+                            {
+                              "type": "text",
+                              "name": "logprobs"
+                            },
+                            {
+                              "type": "text",
+                              "name": "finish_reason"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "name": "usage",
+                          "sub": [
+                            {
+                              "type": "number",
+                              "name": "prompt_tokens"
+                            },
+                            {
+                              "type": "number",
+                              "name": "completion_tokens"
+                            },
+                            {
+                              "type": "number",
+                              "name": "total_tokens"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "name": "headers",
+                      "sub": [
+                        {
+                          "type": "text",
+                          "name": "access-control-allow-origin"
+                        },
+                        {
+                          "type": "text",
+                          "name": "cache-control"
+                        },
+                        {
+                          "type": "text",
+                          "name": "content-type"
+                        },
+                        {
+                          "type": "text",
+                          "name": "date"
+                        },
+                        {
+                          "type": "text",
+                          "name": "openai-model"
+                        },
+                        {
+                          "type": "text",
+                          "name": "openai-organization"
+                        },
+                        {
+                          "type": "text",
+                          "name": "openai-processing-ms"
+                        },
+                        {
+                          "type": "text",
+                          "name": "openai-version"
+                        },
+                        {
+                          "type": "text",
+                          "name": "strict-transport-security"
+                        },
+                        {
+                          "type": "text",
+                          "name": "x-request-id"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "output": true,
+                "meta": [
+                  {
+                    "type": "object",
+                    "name": "data",
+                    "sub": [
+                      {
+                        "type": "text",
+                        "name": "id"
+                      },
+                      {
+                        "type": "text",
+                        "name": "object"
+                      },
+                      {
+                        "type": "number",
+                        "name": "created"
+                      },
+                      {
+                        "type": "text",
+                        "name": "model"
+                      },
+                      {
+                        "type": "array",
+                        "name": "choices",
+                        "sub": [
+                          {
+                            "type": "text",
+                            "name": "text"
+                          },
+                          {
+                            "type": "number",
+                            "name": "index"
+                          },
+                          {
+                            "type": "text",
+                            "name": "logprobs"
+                          },
+                          {
+                            "type": "text",
+                            "name": "finish_reason"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "name": "usage",
+                        "sub": [
+                          {
+                            "type": "number",
+                            "name": "prompt_tokens"
+                          },
+                          {
+                            "type": "number",
+                            "name": "completion_tokens"
+                          },
+                          {
+                            "type": "number",
+                            "name": "total_tokens"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "name": "headers",
+                    "sub": [
+                      {
+                        "type": "text",
+                        "name": "access-control-allow-origin"
+                      },
+                      {
+                        "type": "text",
+                        "name": "cache-control"
+                      },
+                      {
+                        "type": "text",
+                        "name": "content-type"
+                      },
+                      {
+                        "type": "text",
+                        "name": "date"
+                      },
+                      {
+                        "type": "text",
+                        "name": "openai-model"
+                      },
+                      {
+                        "type": "text",
+                        "name": "openai-organization"
+                      },
+                      {
+                        "type": "text",
+                        "name": "openai-processing-ms"
+                      },
+                      {
+                        "type": "text",
+                        "name": "openai-version"
+                      },
+                      {
+                        "type": "text",
+                        "name": "strict-transport-security"
+                      },
+                      {
+                        "type": "text",
+                        "name": "x-request-id"
+                      }
+                    ]
+                  }
+                ],
+                "outputType": "object"
+              },
+              {
+                "name": "respondWP",
+                "module": "api",
+                "action": "send",
+                "options": {
+                  "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
+                  "method": "POST",
+                  "dataType": "x-www-form-urlencoded",
+                  "auth": "username",
+                  "username": "AC65f728ee6851d7a16224843eeaf97a2f",
+                  "password": "70de2903fd947abc56b89754da318b09",
+                  "data": {
+                    "To": "{{$_POST.From}}",
+                    "From": "whatsapp:+14155238886",
+                    "Body": "{{openAI.data.choices[0].text}}"
+                  }
+                }
+              }
+            ]
           },
           "else": {
             "steps": {
