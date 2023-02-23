@@ -2,5 +2,9 @@
   "register.ejs": {
     "layoutPage": "",
     "description": "Page for registration of uses"
+  },
+  "terms-conditions.ejs": {
+    "layoutPage": "",
+    "description": ""
   }
 }

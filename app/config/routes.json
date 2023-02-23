@@ -4,6 +4,10 @@
       "path": "/",
       "page": "index",
       "routeType": "page"
+    },
+    {
+      "path": "/terms-conditions",
+      "page": "terms-conditions"
     }
   ]
 }
