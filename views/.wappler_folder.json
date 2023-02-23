@@ -4,7 +4,7 @@
     "description": "Page for registration of uses"
   },
   "terms-conditions.ejs": {
-    "layoutPage": "",
+    "layoutPage": "main",
     "description": ""
   }
 }
