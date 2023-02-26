@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "Body"
+      },
+      {
+        "type": "text",
+        "name": "To"
+      },
+      {
+        "type": "text",
+        "name": "From"
+      },
+      {
+        "type": "text",
+        "name": "WaId"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "Hola",
+      "module": "core",
+      "action": "response",
+      "options": {
+        "status": 200,
+        "data": "El puto quiere comprar"
+      }
+    }
+  }
+}

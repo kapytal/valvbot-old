@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "action"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "buy",
+      "module": "api",
+      "action": "send",
+      "options": {
+        "method": "POST",
+        "url": "http://localhost/api/wp/buy"
+      },
+      "output": true
+    }
+  }
+}

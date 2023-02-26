@@ -565,7 +565,6 @@
                     }
                   ]
                 },
-                "output": true,
                 "meta": [
                   {
                     "type": "object",
@@ -679,22 +678,45 @@
                 "outputType": "object"
               },
               {
-                "name": "respondWP",
-                "module": "api",
-                "action": "send",
+                "name": "",
+                "module": "core",
+                "action": "condition",
                 "options": {
-                  "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
-                  "method": "POST",
-                  "dataType": "x-www-form-urlencoded",
-                  "auth": "username",
-                  "username": "AC65f728ee6851d7a16224843eeaf97a2f",
-                  "password": "70de2903fd947abc56b89754da318b09",
-                  "data": {
-                    "To": "{{$_POST.From}}",
-                    "From": "whatsapp:+14155238886",
-                    "Body": "{{openAI.data.choices[0].text}}"
+                  "if": "{{openAI.data.choices[0].text.contains('#buy#')}}",
+                  "then": {
+                    "steps": {
+                      "name": "buy",
+                      "module": "api",
+                      "action": "send",
+                      "options": {
+                        "url": "wp/buy",
+                        "method": "POST"
+                      },
+                      "output": true
+                    }
+                  },
+                  "else": {
+                    "steps": {
+                      "name": "respondWP",
+                      "module": "api",
+                      "action": "send",
+                      "options": {
+                        "url": "https://api.twilio.com/2010-04-01/Accounts/AC65f728ee6851d7a16224843eeaf97a2f/Messages.json",
+                        "method": "POST",
+                        "dataType": "x-www-form-urlencoded",
+                        "auth": "username",
+                        "username": "AC65f728ee6851d7a16224843eeaf97a2f",
+                        "password": "70de2903fd947abc56b89754da318b09",
+                        "data": {
+                          "To": "{{$_POST.From}}",
+                          "From": "whatsapp:+14155238886",
+                          "Body": "{{openAI.data.choices[0].text}}"
+                        }
+                      }
+                    }
                   }
-                }
+                },
+                "outputType": "boolean"
               }
             ]
           },

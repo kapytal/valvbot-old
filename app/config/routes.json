@@ -1,6 +1,12 @@
 {
   "routes": [
     {
+      "path": "/wp-buy",
+      "name": "buyWp",
+      "exec": "/api/bot/buy",
+      "method": "post"
+    },
+    {
       "path": "/",
       "page": "index",
       "routeType": "page"
